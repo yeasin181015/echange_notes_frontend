@@ -103,7 +103,6 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-col space-y-5">
-            {" "}
             <input type="file" onChange={handleFileChange} />
             <button
               type="submit"
