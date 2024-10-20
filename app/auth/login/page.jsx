@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 const LoginSchema = z.object({
   email: z.string().nonempty("Email is required").email("Invalid Email"),
@@ -24,6 +25,14 @@ export default function Login() {
   } = useForm({
     resolver: zodResolver(LoginSchema),
   });
+
+  useEffect(() => {
+    const user = localStorage.getItem("userDetails");
+
+    if (user) {
+      router.push("/home");
+    }
+  }, [router]);
 
   const onSubmit = async (data) => {
     try {

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
 
 const SignupSchema = z
   .object({
@@ -23,6 +24,7 @@ const SignupSchema = z
 
 export default function Signup() {
   const router = useRouter();
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   const {
     register,
@@ -31,6 +33,15 @@ export default function Signup() {
   } = useForm({
     resolver: zodResolver(SignupSchema),
   });
+
+  useEffect(() => {
+    const user = localStorage.getItem("userDetails");
+
+    if (user) {
+      setIsUserLoggedIn(true);
+      router.push("/home");
+    }
+  }, [router]);
 
   const onSignupSubmit = async (data) => {
     try {
@@ -47,6 +58,10 @@ export default function Signup() {
       console.error(error);
     }
   };
+
+  if (isUserLoggedIn) {
+    return null;
+  }
 
   return (
     <div className="flex items-center h-screen">

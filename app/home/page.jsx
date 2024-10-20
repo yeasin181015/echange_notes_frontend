@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
@@ -15,11 +16,13 @@ export default function Home() {
   useEffect(() => {
     const details = localStorage.getItem("userDetails");
 
-    if (details) {
+    if (!details) {
+      router.push("/auth/login");
+    } else {
       const userDetails = JSON.parse(details);
       setUser(userDetails);
     }
-  }, []);
+  }, [router]);
 
   const handleFileChange = (e) => {
     if (e.target.files) {
@@ -58,6 +61,11 @@ export default function Home() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userDetails");
+    router.push("/auth/login");
+  };
+
   if (!user) return null;
 
   return (
@@ -70,8 +78,11 @@ export default function Home() {
           <li className="border-b-2 hover:bg-gray-200 p-3">
             <Link href="/uploads">Uploads</Link>
           </li>
-          <li className="border-b-2 hover:bg-gray-200 p-3">
-            <Link href="/downloads">Downloads</Link>
+          <li
+            className="border-b-2 hover:bg-gray-200 p-3 cursor-pointer"
+            onClick={handleLogout}
+          >
+            Logout
           </li>
         </ul>
       </div>

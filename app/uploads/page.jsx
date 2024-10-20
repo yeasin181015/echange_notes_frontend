@@ -3,6 +3,8 @@ import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import FileIcon from "../../images/file.svg";
+import { useRouter } from "next/navigation";
+import BackButton from "../../component/BackButton";
 
 const options = {
   year: "numeric",
@@ -14,17 +16,20 @@ const options = {
 };
 
 const Upload = () => {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
     const details = localStorage.getItem("userDetails");
 
-    if (details) {
+    if (!details) {
+      router.push("/auth/login");
+    } else {
       const userDetails = JSON.parse(details);
       setUser(userDetails);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     // Only fetch resources if user is set
@@ -34,7 +39,6 @@ const Upload = () => {
   }, [user]);
 
   const fetchMyResources = async () => {
-    console.log(user);
     const response = await axios.get(
       `http://localhost:3002/my-resources/${user?.id}`
     );
@@ -55,7 +59,7 @@ const Upload = () => {
   if (!user) return null;
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className="h-screen flex flex-col items-center justify-center">
       <ul className="min-w-[45%] mx-auto">
         {files.length > 0 &&
           files.map((item) => (
@@ -79,6 +83,7 @@ const Upload = () => {
             </li>
           ))}
       </ul>
+      <BackButton />
     </div>
   );
 };

@@ -10,9 +10,9 @@ const Sidebar = () => {
         <li className="border-b-2 hover:bg-gray-200 p-3">
           <Link href="/uploads">Uploads</Link>
         </li>
-        <li className="border-b-2 hover:bg-gray-200 p-3">
+        {/* <li className="border-b-2 hover:bg-gray-200 p-3">
           <Link href="/downloads">Downloads</Link>
-        </li>
+        </li> */}
       </ul>
     </div>
   );
